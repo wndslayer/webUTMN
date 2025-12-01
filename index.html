@@ -1,64 +1,284 @@
-<!doctype html>
-<html lang="ru">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Главная</title>
-  <link rel="stylesheet" href="src/assets/styles/style.css">
+  <meta charset="UTF-8">
+  <title>IT Website</title>
 </head>
 <body>
 
-<header>
-  <img src="kotyonok.jpg" alt="Логотип" width="300">
+  <header class="site-header">
+    <div class="site-header__logo">
+      <h1>IT WEBSITE</h1>
+    </div>
 
-  <nav class="breadcrumbs">
-    <ul>
-      <li class="breadcrumbs__current">Главная</li>
-    </ul>
-  </nav>
+    <nav class="site-header__nav">
+      <ul>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Media</a></li>
+        <li><a href="#">Cases</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contacts</a></li>
+      </ul>
+    </nav>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="contact.html">Контакты</a></li>
-    </ul>
-  </nav>
-</header>
-
-<h1 class="title-h1">Еще Один Раз</h1>
-
-<p class="text-paragraph">Возможно полезная информация</p>
-
-<h3 class="title-h3">Завтра будет круто</h3>
-
-<h4 class="title-h4">Я не знаю что писать</h4>
-
-<p class="text-paragraph">
-  Осенние холода ударили по Тюмени, возможно, скоро пойдет снег
-</p>
-
-<h3 class="title-h3">Что делаем дальше</h3>
-
-<p class="text-paragraph">
-  ниже меня находится палка (Разделитель)
-</p>
-
-<hr>
-
-<footer>
-  <h3 class="title-h3">Инфо для связи</h3>
-
-  <p class="text-paragraph">Пишите мне, постараюсь ответить оперативно (Нет).</p>
+    <div class="site-header__contacts">
+      <ul>
+        <li><a href="tel:+71111111111">+7 (111) 111-11-11</a></li>
+        <li><a href="tel:+71111111111">+7 (111) 111-11-11</a></li>
+        <li><a href="mailto:itcompany@mail.com">itcompany@mail.com</a></li>
+      </ul>
+    </div>
+  </header>
 
   <hr>
 
-  <ul>
-    <li class="text-paragraph">Офис там</li>
-    <li class="text-paragraph">+7 (123) 456-78-98</li>
-    <li class="text-paragraph">pochta@da.ru</li>
-  </ul>
+  <main>
 
-  <p class="text-paragraph">Все права защищены</p>
-</footer>
+    <section class="hero">
+      <div class="hero-intro">
+        <h2>
+          Development of <strong>mobile applications</strong>
+          and <strong>web services</strong> of any complexity
+        </h2>
+        <p>
+          We create mobile applications for iOS, Android that transfer your business
+          to mobile applications of your customers' devices.
+        </p>
+      </div>
+
+      <div class="hero-lead-form">
+        <h3>Leave your contacts and we will call you back within 30 minutes</h3>
+        <form class="hero-lead-form__fields" action="#" method="post">
+          <div>
+            <label for="hero-phone">Phone number</label>
+            <input id="hero-phone" type="tel" placeholder="+7 (111) 111-11-11">
+          </div>
+          <div>
+            <label for="hero-name">Full name</label>
+            <input id="hero-name" type="text" placeholder="Иван Иванов">
+          </div>
+          <button type="submit">Get consultation</button>
+        </form>
+      </div>
+
+      <div class="hero-showcase">
+        <img src="phone_screen.jpg" alt="Mobile application screens" width="600">
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="development-cycle">
+      <article class="development-cycle__technologies">
+        <h2>Full development cycle</h2>
+        <p>We use proven technologies</p>
+
+        <h3>Web</h3>
+        <p>PHP / Javascript / Node.JS / Web Socket / Socket.io / Vue.js / Nuxt / MySQL / Laravel / GO lang / django / Python</p>
+
+        <h3>Mobile</h3>
+        <p>Swift / Kotlin / Alamofire / Firebase / CoreData / Room / Realm / Coroutine / RxJava / RxSwift / Unit Test / Navigation</p>
+      </article>
+
+      <aside class="development-cycle__services-menu">
+        <ul>
+          <li>iOS development</li>
+          <li>Android development</li>
+          <li>Web development</li>
+          <li>UI/UX design</li>
+          <li>Testing</li>
+          <li>Launch</li>
+          <li>IT consulting</li>
+        </ul>
+      </aside>
+    </section>
+
+    <hr>
+
+    <section class="industries">
+      <h2>Developed more than <strong>100</strong> projects in <strong>15</strong> industries</h2>
+      <div class="industries__list">
+        <ul>
+          <li>Social media</li>
+          <li>Fitness and sport</li>
+          <li>Bank</li>
+          <li>Construction</li>
+          <li>Game projects</li>
+          <li>Education</li>
+          <li>Auto, transport</li>
+          <li>Medicine, health</li>
+          <li>Restaurants, food delivery</li>
+          <li>Marketplaces</li>
+          <li>AR technology</li>
+          <li>TV series</li>
+          <li>Startups</li>
+          <li>Religion</li>
+          <li>Online courses</li>
+        </ul>
+      </div>
+    </section>
+
+    <hr>
+
+    <section class="projects">
+      <h2>Projects we are proud of</h2>
+
+      <nav class="projects__tabs">
+        <ul>
+          <li>I-teka</li>
+          <li>Dauletten</li>
+          <li>Guru Bosch</li>
+          <li>Santo</li>
+          <li>Home Credit Bank</li>
+          <li>BI Partners</li>
+          <li>Europharma</li>
+        </ul>
+        <a href="#">View 100 more projects</a>
+      </nav>
+
+      <article class="projects__details">
+        <h3>I-teka</h3>
+        <p>
+          The application is designed to search for drugs by availability in pharmacies in cities.
+          During quarantine, the application helped many people.
+        </p>
+
+        <p>Business analysis / iOS / Android / QA / UI/UX Design</p>
+
+        <ul>
+          <li>Kazakhstan</li>
+          <li>Medicine</li>
+        </ul>
+
+        <p><strong>400%</strong> User Growth</p>
+        <p><strong>+200 000</strong> Active Users</p>
+
+        <img src="appstore.png" alt="App Store" width="300">
+        <img src="googleplay.png" alt="Google Play" width="200">
+
+      </article>
+    </section>
+
+    <hr>
+
+    <section class="discuss-project">
+      <div>
+        <h2>Let's discuss your project</h2>
+        <p>Let's figure out how to create an effective application.</p>
+      </div>
+
+      <form action="#" method="post">
+        <input type="tel" placeholder="+7 (702) 517-11-98">
+        <input type="text" placeholder="Иван Иванов">
+        <button type="submit">Discuss the project</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <section class="dev-stages">
+      <h2>Application Development Stages</h2>
+
+      <article>
+        <h3>Analysis</h3>
+        <p>We write technical specifications for development.</p>
+      </article>
+
+      <article>
+        <h3>Design</h3>
+        <p>We adapt the customer's corporate identity.</p>
+      </article>
+
+      <article>
+        <h3>Development</h3>
+        <p>We create an extensible architecture.</p>
+      </article>
+
+      <article>
+        <h3>Testing</h3>
+        <p>We carry out functional testing.</p>
+      </article>
+
+      <article>
+        <h3>Launching</h3>
+        <p>We publish the application in stores.</p>
+      </article>
+
+      <article>
+        <h3>Support</h3>
+        <p>We monitor the stability of the application.</p>
+      </article>
+    </section>
+
+    <hr>
+
+    <section class="our-team">
+      <article>
+        <h2>Our team</h2>
+        <p>Thousand is a full-cycle digital production company.</p>
+
+        <ul>
+          <li>28 team members</li>
+          <li>+100 projects</li>
+          <li>7 years in IT sphere</li>
+        </ul>
+
+        <p>All the necessary specialists are on our staff.</p>
+      </article>
+
+      <img src="team.jpg" alt="Team photo">
+    </section>
+
+    <hr>
+
+    <section class="free-book">
+      <h2>Get the book for free by leaving your contacts</h2>
+      <form action="#" method="post">
+        <input type="tel" placeholder="+7 (111) 111-11-11">
+        <input type="text" placeholder="Your full name">
+        <input type="email" placeholder="mail@mail.com">
+        <button type="submit">Send me ebook to my mail</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <section class="faq">
+      <h2>FAQ</h2>
+
+      <div>
+        <ul>
+          <li>What is the cost of a mobile application?</li>
+          <li>Do you provide a guarantee for the mobile application?</li>
+          <li>How long will development take?</li>
+          <li>Do you guarantee confidentiality?</li>
+        </ul>
+
+        <article>
+          <h3>How long will development take?</h3>
+          <p>Average development time from start to finished application:</p>
+          <ul>
+            <li>Medium projects up to 3 months</li>
+            <li>Large projects about 4–6 months</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <hr>
+
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <p>+7 (778) 395 90 26</p>
+      <p>mail@mail.com</p>
+      <p>City city, steet st. 90</p>
+      <p>Leave a request</p>
+    </div>
+
+    <h2>IT WEBSITE</h2>
+  </footer>
 
 </body>
 </html>
