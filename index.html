@@ -3,66 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <title>IT Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<div class="page">
+
   <header class="site-header">
-    <div class="site-header__logo">
-      <h1>IT WEBSITE</h1>
-    </div>
+    <div class="site-header__inner">
+      <div class="site-header__logo">
+        <h1>WND IT</h1>
+      </div>
 
-    <nav class="site-header__nav">
-      <ul>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Media</a></li>
-        <li><a href="#">Cases</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="#">Contacts</a></li>
-      </ul>
-    </nav>
+      <nav class="site-header__nav">
+        <ul>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Media</a></li>
+          <li><a href="#">Cases</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contacts</a></li>
+        </ul>
+      </nav>
 
-    <div class="site-header__contacts">
-      <ul>
-        <li><a href="tel:+71111111111">+7 (111) 111-11-11</a></li>
-        <li><a href="tel:+71111111111">+7 (111) 111-11-11</a></li>
-        <li><a href="mailto:itcompany@mail.com">itcompany@mail.com</a></li>
-      </ul>
+      <div class="site-header__contacts">
+        <ul>
+          <li>
+            <a href="tel:+71234567890">
+              <img src="img/icon-phone.png" alt="" class="contact-icon">
+              +7 (123) 456-78-90
+            </a>
+          </li>
+          <li>
+            <a href="tel:+71234567890">
+              +7 (123) 456-78-90
+            </a>
+          </li>
+          <li>
+            <a href="mailto:wnd.it.company@mail.ru">
+              <img src="img/icon-mail.png" alt="" class="contact-icon">
+              wnd.it.company@mail.ru
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </header>
 
-  <hr>
-
-  <main>
+  <main class="main">
 
     <section class="hero">
-      <div class="hero-intro">
-        <h2>
-          Development of <strong>mobile applications</strong>
-          and <strong>web services</strong> of any complexity
-        </h2>
-        <p>
-          We create mobile applications for iOS, Android that transfer your business
-          to mobile applications of your customers' devices.
-        </p>
-      </div>
+      <div class="hero__inner">
 
-      <div class="hero-lead-form">
-        <h3>Leave your contacts and we will call you back within 30 minutes</h3>
-        <form class="hero-lead-form__fields" action="#" method="post">
-          <div>
-            <label for="hero-phone">Phone number</label>
-            <input id="hero-phone" type="tel" placeholder="+7 (111) 111-11-11">
+        <div class="hero-left">
+          <div class="hero-intro">
+            <h2 class="hero-intro__title">
+              Development of <span class="accent">mobile applications</span>
+              and <span class="accent">web services</span> of any complexity
+            </h2>
+            <p class="hero-intro__text">
+              We create mobile applications for iOS, Android that transfer your business
+              to mobile applications of your customers' devices.
+            </p>
           </div>
-          <div>
-            <label for="hero-name">Full name</label>
-            <input id="hero-name" type="text" placeholder="Иван Иванов">
-          </div>
-          <button type="submit">Get consultation</button>
-        </form>
-      </div>
 
-      <div class="hero-showcase">
-        <img src="phone_screen.jpg" alt="Mobile application screens" width="600">
+          <div class="hero-lead-form">
+            <h3 class="hero-lead-form__title">
+              Leave your contacts and we will call you back within 30 minutes
+            </h3>
+            <form class="hero-lead-form__fields" action="#" method="post">
+              <div class="field">
+                <label for="hero-phone">Phone number</label>
+                <input id="hero-phone" type="tel" placeholder="+7 (123) 456-78-90">
+              </div>
+              <div class="field">
+                <label for="hero-name">Full name</label>
+                <input id="hero-name" type="text" placeholder="Иван Иванов">
+              </div>
+              <button class="btn" type="submit">Get consultation</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="hero-showcase">
+          <div class="hero-showcase__card">
+            <img src="img/pc.png" alt="Mobile application screens">
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -153,8 +181,8 @@
         <p><strong>400%</strong> User Growth</p>
         <p><strong>+200 000</strong> Active Users</p>
 
-        <img src="appstore.png" alt="App Store" width="300">
-        <img src="googleplay.png" alt="Google Play" width="200">
+        <img src="img/appstore.png" alt="App Store" width="300">
+        <img src="img/googleplay.png" alt="Google Play" width="200">
 
       </article>
     </section>
@@ -226,7 +254,7 @@
         <p>All the necessary specialists are on our staff.</p>
       </article>
 
-      <img src="team.jpg" alt="Team photo">
+      <img src="img/team.jpg" alt="Team photo">
     </section>
 
     <hr>
@@ -270,15 +298,17 @@
   </main>
 
   <footer class="site-footer">
-    <div>
-      <p>+7 (778) 395 90 26</p>
-      <p>mail@mail.com</p>
-      <p>City city, steet st. 90</p>
-      <p>Leave a request</p>
-    </div>
+    <div class="site-footer__inner">
+      <div>
+        <p>+7 (123) 456 78 90</p>
+        <p>wnd.it.company@mail.ru </p>
+      </div>
 
-    <h2>IT WEBSITE</h2>
+      <h2>WND IT</h2>
+    </div>
   </footer>
+
+</div>
 
 </body>
 </html>
