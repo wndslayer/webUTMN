@@ -144,68 +144,128 @@
     <hr>
 
     <section class="industries">
-      <h2>Developed more than <strong>100</strong> projects in <strong>15</strong> industries</h2>
-      <div class="industries__list">
-        <ul>
-          <li>Social media</li>
-          <li>Fitness and sport</li>
-          <li>Bank</li>
-          <li>Construction</li>
-          <li>Game projects</li>
-          <li>Education</li>
-          <li>Auto, transport</li>
-          <li>Medicine, health</li>
-          <li>Restaurants, food delivery</li>
-          <li>Marketplaces</li>
-          <li>AR technology</li>
-          <li>TV series</li>
-          <li>Startups</li>
-          <li>Religion</li>
-          <li>Online courses</li>
-        </ul>
-      </div>
+        <div class="industries__inner">
+            <h2 class="industries__title">
+                Developed more than <span class="accent">100</span><br>
+                projects in <span class="accent">15</span> industries
+            </h2>
+
+            <ul class="industries__grid">
+                <li class="industry">
+                    <span class="industry__icon">📣</span>
+                    <span class="industry__text">Social media</span>
+                </li>
+                <li class="industry"><span class="industry__icon">🏋️</span><span class="industry__text">Fitness and sport</span>
+                </li>
+                <li class="industry"><span class="industry__icon">🏦</span><span class="industry__text">Bank</span></li>
+                <li class="industry"><span class="industry__icon">🏗️</span><span
+                        class="industry__text">Construction</span></li>
+                <li class="industry"><span class="industry__icon">🎮</span><span
+                        class="industry__text">Game projects</span></li>
+
+                <li class="industry"><span class="industry__icon">🎓</span><span class="industry__text">Education</span>
+                </li>
+                <li class="industry"><span class="industry__icon">🚗</span><span
+                        class="industry__text">Auto, transport</span></li>
+                <li class="industry"><span class="industry__icon">🩺</span><span
+                        class="industry__text">Medicine, health</span></li>
+                <li class="industry"><span class="industry__icon">🍽️</span><span class="industry__text">Restaurants, food delivery</span>
+                </li>
+                <li class="industry"><span class="industry__icon">🛒</span><span
+                        class="industry__text">Marketplaces</span></li>
+
+                <li class="industry"><span class="industry__icon">🧠</span><span
+                        class="industry__text">AR technology</span></li>
+                <li class="industry"><span class="industry__icon">📺</span><span class="industry__text">TV series</span>
+                </li>
+                <li class="industry"><span class="industry__icon">🚀</span><span class="industry__text">Startups</span>
+                </li>
+                <li class="industry"><span class="industry__icon">🕊️</span><span class="industry__text">Religion</span>
+                </li>
+                <li class="industry"><span class="industry__icon">💻</span><span
+                        class="industry__text">Online courses</span></li>
+            </ul>
+        </div>
     </section>
 
     <hr>
 
     <section class="projects">
-      <h2>Projects we are proud of</h2>
+  <div class="projects__inner">
+    <header class="projects__head">
+      <div class="projects__head-left">
+        <h2 class="projects__title">Projects we are proud of</h2>
+        <p class="projects__subtitle">
+          Our software development company is truly proud of the wonderful clients we have worked with.
+          We enjoy a long-term partnership
+        </p>
+      </div>
 
-      <nav class="projects__tabs">
-        <ul>
-          <li>I-teka</li>
-          <li>Dauletten</li>
-          <li>Guru Bosch</li>
-          <li>Santo</li>
-          <li>Home Credit Bank</li>
-          <li>BI Partners</li>
-          <li>Europharma</li>
+      <!-- твой nav tabs уже готов -->
+      <nav class="projects__tabs" aria-label="Project tabs">
+        <ul class="projects__tablist">
+          <li><button class="projects__tab is-active" type="button">I-teka</button></li>
+          <li><button class="projects__tab" type="button">Dauletten</button></li>
+          <li><button class="projects__tab" type="button">Guru Bosch</button></li>
+          <li><button class="projects__tab" type="button">Santo</button></li>
+          <li><button class="projects__tab" type="button">Home Credit Bank</button></li>
+          <li><button class="projects__tab" type="button">BI Partners</button></li>
+          <li><button class="projects__tab" type="button">Europharma</button></li>
         </ul>
-        <a href="#">View 100 more projects</a>
-      </nav>
 
-      <article class="projects__details">
-        <h3>I-teka</h3>
-        <p>
+        <a class="projects__more" href="#">View 100 more projects</a>
+      </nav>
+    </header>
+
+    <div class="project-card">
+      <div class="project-card__left">
+        <!-- твой existing контент, просто внутри -->
+        <h3 class="project-card__name">I-teka</h3>
+
+        <p class="project-card__desc">
           The application is designed to search for drugs by availability in pharmacies in cities.
           During quarantine, the application helped many people.
         </p>
 
-        <p>Business analysis / iOS / Android / QA / UI/UX Design</p>
+        <p class="project-card__stack">
+          Business analysis / <span>iOS</span> / <span>Android</span> / <span>QA</span> / <span>UI/UX Design</span>
+        </p>
 
-        <ul>
-          <li>Kazakhstan</li>
-          <li>Medicine</li>
-        </ul>
+        <!-- вместо буллетов делаем “чипы” -->
+        <div class="project-card__tags">
+          <span class="tag tag--pin">Kazakhstan</span>
+          <span class="tag tag--med">Medicine</span>
+        </div>
 
-        <p><strong>400%</strong> User Growth</p>
-        <p><strong>+200 000</strong> Active Users</p>
+        <div class="project-card__stats">
+          <div class="stat">
+            <div class="stat__value">400%</div>
+            <div class="stat__label">User Growth</div>
+          </div>
+          <div class="stat">
+            <div class="stat__value">+ 200 000</div>
+            <div class="stat__label">Active Users</div>
+          </div>
+        </div>
 
-        <img src="img/appstore.png" alt="App Store" width="300">
-        <img src="img/googleplay.png" alt="Google Play" width="200">
+        <div class="project-card__stores">
+          <a href="#" class="store-btn">
+            <img src="img/appstore.png" alt="App Store" style="width:300px;height:auto;">
+          </a>
+          <a href="#" class="store-btn">
+            <img src="img/googleplay.png" alt="Google Play" width="160">
+          </a>
+        </div>
+      </div>
 
-      </article>
-    </section>
+      <div class="project-card__right">
+        <!-- картинка телефонов как в рефе -->
+        <img class="project-card__mock" src="img/phone.png" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <hr>
 

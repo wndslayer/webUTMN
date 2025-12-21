@@ -519,4 +519,337 @@ body {
   pointer-events: none;
 }
 
+.industries {
+  padding: 72px 0;
+  padding-top: 50px;
+}
 
+.industries__inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.industries__title {
+  max-width: 700px;
+  margin: 0 0 34px;
+  font-size: 34px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 40px;   // было ~34px
+  line-height: 1.1;
+
+  .accent { color: $primary; }
+}
+
+.industries__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 72px;
+  row-gap: 18px;
+}
+
+.industry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.industry__icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: $primary;
+  font-size: 25px;
+  flex: 0 0 48px;
+}
+
+.industry__text {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* адаптив */
+@media (max-width: 1024px) {
+  .industries__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .industries {
+    padding: 52px 0;
+  }
+
+  .industries__title {
+    font-size: 26px;
+  }
+
+  .industries__grid {
+    grid-template-columns: 1fr;
+    row-gap: 14px;
+  }
+
+  .industry__text {
+    white-space: normal;
+  }
+}
+.projects {
+  padding: 72px 0;
+}
+
+.projects__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.projects__head {
+  display: grid;
+  gap: 18px;
+}
+
+.projects__head-left {
+  max-width: 520px;
+}
+
+.projects__title {
+  margin: 0 0 10px;
+  font-size: 32px;
+  line-height: 1.15;
+}
+
+.projects__subtitle {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: $muted;
+  font-weight: 600;
+}
+/* tabs + button (не хватало) */
+.projects__tabs{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 18px; // как в рефе: табы под текстом
+}
+
+.projects__tablist{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.projects__tablist li{
+  margin: 0;
+  padding: 0;
+}
+
+.projects__tab{
+  background: transparent;
+  border: 0;
+  padding: 8px 0;
+  font: inherit;
+
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  position: relative;
+}
+
+.projects__tab::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 2px;
+  background: transparent;
+  border-radius: 2px;
+}
+
+.projects__tab.is-active{
+  color: $text;
+}
+
+.projects__tab.is-active::after{
+  background: $primary;
+}
+
+.projects__more{
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 10px;
+
+  background: $primary;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.25);
+}
+
+.projects__more:hover{
+  opacity: 0.95;
+}
+
+/* tabs ты уже стилизовал — ок */
+
+.project-card {
+  margin-top: 34px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
+  gap: 36px;
+  align-items: center;
+}
+
+.project-card__name {
+  margin: 0 0 14px;
+  font-size: 34px;
+  line-height: 1.1;
+}
+
+.project-card__desc {
+  margin: 0 0 18px;
+  max-width: 520px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: $muted;
+  font-weight: 600;
+}
+
+.project-card__stack {
+  margin: 0 0 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #334155;
+  font-weight: 600;
+
+  span {
+    color: $primary;
+  }
+}
+
+.project-card__tags {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.tag {
+  position: relative;
+  padding-left: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.tag::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  border: 2px solid $primary;
+}
+
+.project-card__stats {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 34px;
+  margin-bottom: 20px;
+}
+
+.stat__value {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: $text;
+}
+
+.stat__label {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: $muted;
+}
+
+.project-card__stores {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.store-btn {
+  display: inline-flex;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.store-btn img {
+  display: block;
+  height: 70px;
+  width: auto;
+}
+
+.project-card__right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.project-card__mock {
+  max-width: 620px;
+  width: 100%;
+  margin-left: -60px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 22px 55px rgba(15, 23, 42, 0.22));
+}
+
+/* адаптив */
+@media (max-width: 1024px) {
+  .project-card {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card__right {
+    justify-content: center;
+  }
+}
