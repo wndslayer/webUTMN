@@ -480,8 +480,7 @@ body {
     grid-template-columns: 1fr;
     padding: 44px 16px;
   }
-}
-@media (max-width: 768px) {
+  
   .site-header__contacts li:nth-child(2) {
     display: none;
   }
