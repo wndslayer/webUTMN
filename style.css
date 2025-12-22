@@ -1,0 +1,58 @@
+@charset "UTF-8";
+.list-item {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.list-item__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.list-item__items {
+  padding-left: 1.75em;
+  display: none;
+}
+
+.list-item_open > .list-item__items {
+  display: block;
+}
+
+/* стрелка */
+.list-item__arrow {
+  width: 1em;
+  height: 1em;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.list-item_open > .list-item__inner .list-item__arrow {
+  transform: rotate(180deg);
+}
+
+.list-item__toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.list-item__arrow-spacer {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+}
+
+.list-item__folder {
+  width: 1.75em;
+  height: auto;
+}
+
+.list-item__inner span {
+  user-select: none;
+}
+
+/*# sourceMappingURL=style.css.map */
