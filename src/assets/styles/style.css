@@ -1,15 +1,9 @@
 @import "./global.css";
 @import "./fonts.css";
-@import "./utils.css";
-@import "./catalog.css";
-@import "./post.css";
-@import "./photo.css";
-@import "./post-detail.css";
-
-.test {
-    color: yellow !important;
-}
-
-.test {
-    color: red !important;
-}
+@import "./header.css";
+@import "./main.css";
+@import "./loader.css";
+@import "./form.css";
+@import "./text-field.css";
+@import "./button.css";
+@import "./todo.css";
