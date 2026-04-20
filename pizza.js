@@ -31,37 +31,34 @@ class Pizza {
     };
 
     constructor(type, size) {
-        if (!Pizza.TYPES[type]) {
-            throw new Error(`Неизвестный вид пиццы: "${type}". Доступные: ${Object.keys(Pizza.TYPES).join(', ')}`);
-        }
-        if (!Pizza.SIZES[size]) {
-            throw new Error(`Неизвестный размер пиццы: "${size}". Доступные: ${Object.keys(Pizza.SIZES).join(', ')}`);
-        }
+        if (!Pizza.TYPES[type]) throw new Error(`Неизвестный вид пиццы: "${type}"`);
+        if (!Pizza.SIZES[size]) throw new Error(`Неизвестный размер пиццы: "${size}"`);
         this.type = type;
         this.size = size;
         this.toppings = [];
     }
 
+    setType(type) {
+        if (!Pizza.TYPES[type]) throw new Error(`Неизвестный вид: ${type}`);
+        this.type = type;
+        return this;
+    }
+
+    setSize(size) {
+        if (!Pizza.SIZES[size]) throw new Error(`Неизвестный размер: ${size}`);
+        this.size = size;
+        return this;
+    }
+
     addTopping(topping) {
-        if (!Pizza.TOPPINGS[topping]) {
-            throw new Error(`Неизвестная добавка: "${topping}"`);
-        }
-        if (this.toppings.includes(topping)) {
-            console.log(`Добавка "${Pizza.TOPPINGS[topping].name}" уже есть в пицце.`);
-            return this;
-        }
-        this.toppings.push(topping);
+        if (!Pizza.TOPPINGS[topping]) throw new Error(`Неизвестная добавка: ${topping}`);
+        if (!this.toppings.includes(topping)) this.toppings.push(topping);
         return this;
     }
 
     removeTopping(topping) {
-        const index = this.toppings.indexOf(topping);
-        if (index === -1) {
-            const label = Pizza.TOPPINGS[topping]?.name || topping;
-            console.log(`Добавки "${label}" нет в пицце.`);
-            return this;
-        }
-        this.toppings.splice(index, 1);
+        const i = this.toppings.indexOf(topping);
+        if (i !== -1) this.toppings.splice(i, 1);
         return this;
     }
 
@@ -79,45 +76,13 @@ class Pizza {
 
     calculatePrice() {
         let price = Pizza.TYPES[this.type].price + Pizza.SIZES[this.size].price;
-        for (const topping of this.toppings) {
-            price += Pizza.TOPPINGS[topping][this.size].price;
-        }
+        for (const t of this.toppings) price += Pizza.TOPPINGS[t][this.size].price;
         return price;
     }
 
     calculateCalories() {
-        let calories = Pizza.TYPES[this.type].calories + Pizza.SIZES[this.size].calories;
-        for (const topping of this.toppings) {
-            calories += Pizza.TOPPINGS[topping][this.size].calories;
-        }
-        return calories;
-    }
-
-    describe() {
-        const toppings = this.getToppings();
-        console.log('--- Пицца ---');
-        console.log(`Вид:          ${this.getSize()}`);
-        console.log(`Размер:       ${this.getStuffing()}`);
-        console.log(`Добавки:      ${toppings.length ? toppings.join(', ') : 'нет'}`);
-        console.log(`Цена:         ${this.calculatePrice()} руб.`);
-        console.log(`Калорийность: ${this.calculateCalories()} Ккал`);
+        let cal = Pizza.TYPES[this.type].calories + Pizza.SIZES[this.size].calories;
+        for (const t of this.toppings) cal += Pizza.TOPPINGS[t][this.size].calories;
+        return cal;
     }
 }
-
-const pizza1 = new Pizza('PEPPERONI', 'LARGE');
-pizza1.addTopping('MOZZARELLA');
-pizza1.addTopping('CHEESE_BORDER');
-pizza1.describe();
-
-console.log();
-
-const pizza2 = new Pizza('MARGHERITA', 'SMALL');
-pizza2.addTopping('CHEDDAR_PARMESAN');
-pizza2.addTopping('MOZZARELLA');
-pizza2.removeTopping('MOZZARELLA');
-pizza2.describe();
-
-console.log();
-
-const pizza3 = new Pizza('BAVARIAN', 'LARGE');
-pizza3.describe();
