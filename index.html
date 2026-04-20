@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор пиццы</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+</head>
+<body>
+    <main class="card">
+        <section class="pizzas">
+            <div class="pizza" data-type="PEPPERONI">
+                <img src="/home/wnd/webUTMN/Images/pepproni.jpg"
+                     alt="Пепперони" loading="lazy"
+                     onerror="this.replaceWith(Object.assign(document.createElement('div'), {className:'pizza-fallback', textContent:'🍕'}))">
+                <span class="pizza__name">Пепперони</span>
+            </div>
+
+            <div class="pizza" data-type="MARGHERITA">
+                <img src="/home/wnd/webUTMN/Images/margarita.jpg"
+                     alt="Маргарита" loading="lazy"
+                     onerror="this.replaceWith(Object.assign(document.createElement('div'), {className:'pizza-fallback', textContent:'🍕'}))">
+                <span class="pizza__name">Маргарита</span>
+            </div>
+
+            <div class="pizza" data-type="BAVARIAN">
+                <img src="/home/wnd/webUTMN/Images/bavarian.jpg"
+                     alt="Баварская" loading="lazy"
+                     onerror="this.replaceWith(Object.assign(document.createElement('div'), {className:'pizza-fallback', textContent:'🍕'}))">
+                <span class="pizza__name">Баварская</span>
+            </div>
+        </section>
+
+        <aside class="panel">
+            <header class="panel__head">
+                <h2>Выберите размер</h2>
+                <span class="info" title="Размер влияет на цену и калорийность">i</span>
+            </header>
+
+            <div class="size-toggle" role="tablist">
+                <button type="button" class="size-toggle__btn" data-size="SMALL" role="tab">Маленькая</button>
+                <button type="button" class="size-toggle__btn" data-size="LARGE" role="tab">Большая</button>
+            </div>
+
+            <h2 class="panel__subhead">Добавить по вкусу</h2>
+
+            <div class="toppings">
+                <button type="button" class="topping" data-topping="CHEESE_BORDER">
+                    <span class="topping__icon topping__icon--crust">🥖</span>
+                    <span class="topping__name">Сырный бортик</span>
+                    <span class="topping__price" data-topping-price></span>
+                </button>
+
+                <button type="button" class="topping" data-topping="MOZZARELLA">
+                    <span class="topping__icon topping__icon--mozzarella">🧀</span>
+                    <span class="topping__name">Сливочная моцарелла</span>
+                    <span class="topping__price" data-topping-price></span>
+                </button>
+
+                <button type="button" class="topping" data-topping="CHEDDAR_PARMESAN">
+                    <span class="topping__icon topping__icon--cheddar">🧈</span>
+                    <span class="topping__name">Чеддер и пармезан</span>
+                    <span class="topping__price" data-topping-price></span>
+                </button>
+            </div>
+
+            <button type="button" class="cart">
+                <span class="cart__label">Добавить в корзину за</span>
+                <span class="cart__numbers">
+                    <span data-price>0</span> ₽
+                    <span class="cart__sep">(<span data-calories>0</span> кКалл)</span>
+                </span>
+            </button>
+        </aside>
+    </main>
+
+    <script src="pizza.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
