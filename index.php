@@ -1,110 +1,155 @@
 <?php
-$pageTitle = 'Урок 18';
+$pageTitle = 'Урок 19 — фотогалерея';
 
-function printNumbers()
+$photosDir = __DIR__ . '/photos';
+$thumbsDir = $photosDir . '/thumbs';
+$photosUrl = 'photos';
+$thumbsUrl = 'photos/thumbs';
+
+$maxFileSize = 5 * 1024 * 1024;
+$thumbWidth = 300;
+$originalMaxWidth = 1600;
+$allowedTypes = [
+    IMAGETYPE_JPEG => 'jpg',
+    IMAGETYPE_PNG  => 'png',
+    IMAGETYPE_GIF  => 'gif',
+    IMAGETYPE_WEBP => 'webp',
+];
+
+if (!is_dir($thumbsDir)) {
+    mkdir($thumbsDir, 0755, true);
+}
+
+function resizeImage($sourcePath, $destPath, $maxWidth, $imageType)
 {
+    [$width, $height] = getimagesize($sourcePath);
+
+    if ($width <= $maxWidth) {
+        $newWidth = $width;
+        $newHeight = $height;
+    } else {
+        $newWidth = $maxWidth;
+        $newHeight = (int) round($height * $maxWidth / $width);
+    }
+
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            $src = imagecreatefromjpeg($sourcePath);
+            break;
+        case IMAGETYPE_PNG:
+            $src = imagecreatefrompng($sourcePath);
+            break;
+        case IMAGETYPE_GIF:
+            $src = imagecreatefromgif($sourcePath);
+            break;
+        case IMAGETYPE_WEBP:
+            $src = imagecreatefromwebp($sourcePath);
+            break;
+        default:
+            return false;
+    }
+
+    $dst = imagecreatetruecolor($newWidth, $newHeight);
+
+    if ($imageType === IMAGETYPE_PNG || $imageType === IMAGETYPE_GIF) {
+        imagecolortransparent($dst, imagecolorallocatealpha($dst, 0, 0, 0, 127));
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+    }
+
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+
+    switch ($imageType) {
+        case IMAGETYPE_JPEG:
+            imagejpeg($dst, $destPath, 88);
+            break;
+        case IMAGETYPE_PNG:
+            imagepng($dst, $destPath, 6);
+            break;
+        case IMAGETYPE_GIF:
+            imagegif($dst, $destPath);
+            break;
+        case IMAGETYPE_WEBP:
+            imagewebp($dst, $destPath, 85);
+            break;
+    }
+
+    imagedestroy($src);
+    imagedestroy($dst);
+    return true;
+}
+
+function getGalleryFiles($dir)
+{
+    if (!is_dir($dir)) {
+        return [];
+    }
+
+    $files = scandir($dir);
     $result = [];
-    $i = 0;
-    do {
-        if ($i === 0) {
-            $result[] = "$i — это ноль.";
-        } elseif ($i % 2 === 0) {
-            $result[] = "$i — чётное число.";
-        } else {
-            $result[] = "$i — нечётное число.";
-        }
-        $i++;
-    } while ($i <= 10);
+    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') continue;
+        if (is_dir($dir . '/' . $file)) continue;
+
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if (in_array($ext, $extensions, true)) {
+            $result[] = $file;
+        }
+    }
+
+    sort($result);
     return $result;
 }
 
-$regions = [
-    'Московская область' => ['Москва', 'Зеленоград', 'Клин'],
-    'Ленинградская область' => ['Санкт-Петербург', 'Всеволожск', 'Павловск', 'Кронштадт'],
-    'Тюменская область' => ['Тюмень', 'Тобольск', 'Ишим', 'Ялуторовск'],
-    'Свердловская область' => ['Екатеринбург', 'Нижний Тагил', 'Каменск-Уральский'],
-];
+$uploadError = null;
+$uploadSuccess = false;
 
-$translitMap = [
-    'а' => 'a',  'б' => 'b',  'в' => 'v',  'г' => 'g',  'д' => 'd',
-    'е' => 'e',  'ё' => 'yo', 'ж' => 'zh', 'з' => 'z',  'и' => 'i',
-    'й' => 'y',  'к' => 'k',  'л' => 'l',  'м' => 'm',  'н' => 'n',
-    'о' => 'o',  'п' => 'p',  'р' => 'r',  'с' => 's',  'т' => 't',
-    'у' => 'u',  'ф' => 'f',  'х' => 'h',  'ц' => 'ts', 'ч' => 'ch',
-    'ш' => 'sh', 'щ' => 'shch', 'ъ' => '', 'ы' => 'y',  'ь' => '',
-    'э' => 'e',  'ю' => 'yu', 'я' => 'ya',
-];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
+    $file = $_FILES['photo'];
 
-function transliterate($text, $map)
-{
-    $result = '';
-    $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
+    $errorMessages = [
+        UPLOAD_ERR_INI_SIZE   => 'Файл превышает лимит сервера (upload_max_filesize).',
+        UPLOAD_ERR_FORM_SIZE  => 'Файл превышает лимит, заданный формой.',
+        UPLOAD_ERR_PARTIAL    => 'Файл загружен не полностью.',
+        UPLOAD_ERR_NO_FILE    => 'Файл не выбран.',
+        UPLOAD_ERR_NO_TMP_DIR => 'На сервере не настроена временная папка.',
+        UPLOAD_ERR_CANT_WRITE => 'Не удалось записать файл на диск.',
+        UPLOAD_ERR_EXTENSION  => 'Загрузка остановлена расширением PHP.',
+    ];
 
-    foreach ($chars as $char) {
-        $lower = mb_strtolower($char);
-        if (isset($map[$lower])) {
-            $latin = $map[$lower];
-            if ($char !== $lower) {
-                $latin = mb_strtoupper(mb_substr($latin, 0, 1)) . mb_substr($latin, 1);
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $uploadError = $errorMessages[$file['error']] ?? 'Неизвестная ошибка загрузки.';
+    } elseif ($file['size'] > $maxFileSize) {
+        $uploadError = 'Файл слишком большой. Максимум ' . ($maxFileSize / 1024 / 1024) . ' МБ.';
+    } else {
+        $info = getimagesize($file['tmp_name']);
+        if ($info === false || !isset($allowedTypes[$info[2]])) {
+            $uploadError = 'Допустимые форматы: JPG, PNG, GIF, WEBP.';
+        } else {
+            $imageType = $info[2];
+            $ext = $allowedTypes[$imageType];
+            $fileName = uniqid('img_', true) . '.' . $ext;
+            $destPath = $photosDir . '/' . $fileName;
+            $thumbPath = $thumbsDir . '/' . $fileName;
+
+            if (resizeImage($file['tmp_name'], $destPath, $originalMaxWidth, $imageType)
+                && resizeImage($file['tmp_name'], $thumbPath, $thumbWidth, $imageType)) {
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?uploaded=1');
+                exit;
+            } else {
+                $uploadError = 'Не удалось обработать изображение.';
             }
-            $result .= $latin;
-        } else {
-            $result .= $char;
         }
     }
-
-    return $result;
 }
 
-$translitExamples = [
-    'Привет, мир!',
-    'Тюменский государственный университет',
-    'Щука, ёж и язь',
-];
-
-$menu = [
-    ['title' => 'Главная', 'url' => '#'],
-    [
-        'title' => 'Каталог',
-        'url' => '#',
-        'children' => [
-            ['title' => 'Книги', 'url' => '#'],
-            ['title' => 'Фильмы', 'url' => '#'],
-            [
-                'title' => 'Музыка',
-                'url' => '#',
-                'children' => [
-                    ['title' => 'Рок', 'url' => '#'],
-                    ['title' => 'Джаз', 'url' => '#'],
-                ],
-            ],
-        ],
-    ],
-    [
-        'title' => 'О компании',
-        'url' => '#',
-        'children' => [
-            ['title' => 'История', 'url' => '#'],
-            ['title' => 'Команда', 'url' => '#'],
-        ],
-    ],
-    ['title' => 'Контакты', 'url' => '#'],
-];
-
-function renderMenu($items)
-{
-    echo '<ul>';
-    foreach ($items as $item) {
-        echo '<li>';
-        echo '<a href="' . $item['url'] . '">' . $item['title'] . '</a>';
-        if (!empty($item['children'])) {
-            renderMenu($item['children']);
-        }
-        echo '</li>';
-    }
-    echo '</ul>';
+if (isset($_GET['uploaded']) && !$uploadError) {
+    $uploadSuccess = true;
 }
+
+$photos = getGalleryFiles($photosDir);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -120,38 +165,42 @@ function renderMenu($items)
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="/" class="logo">lesson 18</a>
+            <a href="/" class="logo">lesson 19</a>
         </div>
     </header>
 
     <main class="container">
         <section class="task">
-            <h2>Задание 1</h2>
-            <?php foreach (printNumbers() as $line): ?>
-                <p><?= $line ?></p>
-            <?php endforeach; ?>
+            <h2>Загрузить изображение</h2>
+
+            <?php if ($uploadError): ?>
+                <p class="alert alert-error"><?= $uploadError ?></p>
+            <?php endif; ?>
+
+            <?php if ($uploadSuccess): ?>
+                <p class="alert alert-ok">Изображение загружено.</p>
+            <?php endif; ?>
+
+            <form method="post" enctype="multipart/form-data" class="upload-form">
+                <input type="file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required>
+                <button type="submit">Загрузить</button>
+            </form>
+            <p class="muted">JPG, PNG, GIF или WEBP, до 5 МБ.</p>
         </section>
 
         <section class="task">
-            <h2>Задание 2</h2>
-            <?php foreach ($regions as $region => $cities): ?>
-                <p><?= $region ?>:</p>
-                <p><?= implode(', ', $cities) ?>.</p>
-            <?php endforeach; ?>
-        </section>
-
-        <section class="task">
-            <h2>Задание 3</h2>
-            <?php foreach ($translitExamples as $text): ?>
-                <p><?= $text ?> → <?= transliterate($text, $translitMap) ?></p>
-            <?php endforeach; ?>
-        </section>
-
-        <section class="task">
-            <h2>Задание 4</h2>
-            <nav class="site-menu">
-                <?php renderMenu($menu); ?>
-            </nav>
+            <h2>Галерея</h2>
+            <?php if (empty($photos)): ?>
+                <p class="muted">Пока пусто. Загрузите первое изображение через форму выше.</p>
+            <?php else: ?>
+                <div class="gallery">
+                    <?php foreach ($photos as $photo): ?>
+                        <a href="<?= $photosUrl . '/' . $photo ?>" target="_blank" rel="noopener">
+                            <img src="<?= $thumbsUrl . '/' . $photo ?>" alt="<?= $photo ?>">
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </section>
     </main>
 
