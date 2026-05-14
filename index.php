@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Урок 19 — фотогалерея';
+$pageTitle = 'lesson19';
 
 $photosDir = __DIR__ . '/photos';
 $thumbsDir = $photosDir . '/thumbs';
