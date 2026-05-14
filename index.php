@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Урок 16 — PHP, переменные и функции';
+$pageTitle = 'lesson16';
 $pageHeading = 'Текущее время на сервере';
 $currentYear = date('Y');
 
