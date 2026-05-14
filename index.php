@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'lesson 17';
+$pageTitle = 'lesson17';
 
 function solveTask1($a, $b)
 {
