@@ -52,3 +52,5 @@ photos/*
 !photos/thumbs/
 photos/thumbs/*
 !photos/thumbs/.gitkeep
+
+config.php

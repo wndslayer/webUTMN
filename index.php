@@ -1,213 +1,80 @@
 <?php
-$pageTitle = 'lesson19';
 
-$photosDir = __DIR__ . '/photos';
-$thumbsDir = $photosDir . '/thumbs';
-$photosUrl = 'photos';
-$thumbsUrl = 'photos/thumbs';
+$config = require __DIR__ . '/config.php';
+$db = $config['db'];
 
-$maxFileSize = 5 * 1024 * 1024;
-$thumbWidth = 300;
-$originalMaxWidth = 1600;
-$allowedTypes = [
-    IMAGETYPE_JPEG => 'jpg',
-    IMAGETYPE_PNG  => 'png',
-    IMAGETYPE_GIF  => 'gif',
-    IMAGETYPE_WEBP => 'webp',
-];
+$dsn = "mysql:host={$db['host']};dbname={$db['database']};charset={$db['charset']}";
+$pdo = new PDO($dsn, $db['username'], $db['password'], [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
 
-if (!is_dir($thumbsDir)) {
-    mkdir($thumbsDir, 0755, true);
-}
+$rows = $pdo->query('SELECT id, parent_id, title, is_open FROM categories ORDER BY parent_id, sort_order, id')->fetchAll();
 
-function resizeImage($sourcePath, $destPath, $maxWidth, $imageType)
+function buildTree(array $rows, $parentId = null)
 {
-    [$width, $height] = getimagesize($sourcePath);
-
-    if ($width <= $maxWidth) {
-        $newWidth = $width;
-        $newHeight = $height;
-    } else {
-        $newWidth = $maxWidth;
-        $newHeight = (int) round($height * $maxWidth / $width);
-    }
-
-    switch ($imageType) {
-        case IMAGETYPE_JPEG:
-            $src = imagecreatefromjpeg($sourcePath);
-            break;
-        case IMAGETYPE_PNG:
-            $src = imagecreatefrompng($sourcePath);
-            break;
-        case IMAGETYPE_GIF:
-            $src = imagecreatefromgif($sourcePath);
-            break;
-        case IMAGETYPE_WEBP:
-            $src = imagecreatefromwebp($sourcePath);
-            break;
-        default:
-            return false;
-    }
-
-    $dst = imagecreatetruecolor($newWidth, $newHeight);
-
-    if ($imageType === IMAGETYPE_PNG || $imageType === IMAGETYPE_GIF) {
-        imagecolortransparent($dst, imagecolorallocatealpha($dst, 0, 0, 0, 127));
-        imagealphablending($dst, false);
-        imagesavealpha($dst, true);
-    }
-
-    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-    switch ($imageType) {
-        case IMAGETYPE_JPEG:
-            imagejpeg($dst, $destPath, 88);
-            break;
-        case IMAGETYPE_PNG:
-            imagepng($dst, $destPath, 6);
-            break;
-        case IMAGETYPE_GIF:
-            imagegif($dst, $destPath);
-            break;
-        case IMAGETYPE_WEBP:
-            imagewebp($dst, $destPath, 85);
-            break;
-    }
-
-    imagedestroy($src);
-    imagedestroy($dst);
-    return true;
-}
-
-function getGalleryFiles($dir)
-{
-    if (!is_dir($dir)) {
-        return [];
-    }
-
-    $files = scandir($dir);
-    $result = [];
-    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-    foreach ($files as $file) {
-        if ($file === '.' || $file === '..') continue;
-        if (is_dir($dir . '/' . $file)) continue;
-
-        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        if (in_array($ext, $extensions, true)) {
-            $result[] = $file;
+    $tree = [];
+    foreach ($rows as $row) {
+        if ((int) $row['parent_id'] === (int) $parentId || ($row['parent_id'] === null && $parentId === null)) {
+            $children = buildTree($rows, $row['id']);
+            $tree[] = [
+                'title'    => $row['title'],
+                'open'     => (bool) $row['is_open'],
+                'children' => $children,
+            ];
         }
     }
-
-    sort($result);
-    return $result;
+    return $tree;
 }
 
-$uploadError = null;
-$uploadSuccess = false;
+function renderTree(array $nodes)
+{
+    $html = '';
+    foreach ($nodes as $node) {
+        $hasChildren = !empty($node['children']);
+        $isOpen = $node['open'] && $hasChildren;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['photo'])) {
-    $file = $_FILES['photo'];
+        $classes = 'list-item' . ($isOpen ? ' list-item_open' : '');
+        $parentAttr = $hasChildren ? ' data-parent' : '';
 
-    $errorMessages = [
-        UPLOAD_ERR_INI_SIZE   => 'Файл превышает лимит сервера (upload_max_filesize).',
-        UPLOAD_ERR_FORM_SIZE  => 'Файл превышает лимит, заданный формой.',
-        UPLOAD_ERR_PARTIAL    => 'Файл загружен не полностью.',
-        UPLOAD_ERR_NO_FILE    => 'Файл не выбран.',
-        UPLOAD_ERR_NO_TMP_DIR => 'На сервере не настроена временная папка.',
-        UPLOAD_ERR_CANT_WRITE => 'Не удалось записать файл на диск.',
-        UPLOAD_ERR_EXTENSION  => 'Загрузка остановлена расширением PHP.',
-    ];
+        $html .= '<div class="' . $classes . '"' . $parentAttr . '>';
+        $html .=   '<div class="list-item__inner">';
 
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        $uploadError = $errorMessages[$file['error']] ?? 'Неизвестная ошибка загрузки.';
-    } elseif ($file['size'] > $maxFileSize) {
-        $uploadError = 'Файл слишком большой. Максимум ' . ($maxFileSize / 1024 / 1024) . ' МБ.';
-    } else {
-        $info = getimagesize($file['tmp_name']);
-        if ($info === false || !isset($allowedTypes[$info[2]])) {
-            $uploadError = 'Допустимые форматы: JPG, PNG, GIF, WEBP.';
+        if ($hasChildren) {
+            $html .= '<button class="list-item__toggle" type="button" data-toggle aria-label="toggle">';
+            $html .=   '<img class="list-item__arrow" src="img/chevron-down.png" alt="">';
+            $html .= '</button>';
         } else {
-            $imageType = $info[2];
-            $ext = $allowedTypes[$imageType];
-            $fileName = uniqid('img_', true) . '.' . $ext;
-            $destPath = $photosDir . '/' . $fileName;
-            $thumbPath = $thumbsDir . '/' . $fileName;
-
-            if (resizeImage($file['tmp_name'], $destPath, $originalMaxWidth, $imageType)
-                && resizeImage($file['tmp_name'], $thumbPath, $thumbWidth, $imageType)) {
-                header('Location: ' . $_SERVER['PHP_SELF'] . '?uploaded=1');
-                exit;
-            } else {
-                $uploadError = 'Не удалось обработать изображение.';
-            }
+            $html .= '<span class="list-item__arrow-spacer"></span>';
         }
+
+        $html .=   '<img class="list-item__folder" src="img/folder.png" alt="folder">';
+        $html .=   '<span>' . htmlspecialchars($node['title'], ENT_QUOTES, 'UTF-8') . '</span>';
+        $html .=   '</div>';
+
+        if ($hasChildren) {
+            $html .= '<div class="list-item__items">' . renderTree($node['children']) . '</div>';
+        }
+
+        $html .= '</div>';
     }
+    return $html;
 }
 
-if (isset($_GET['uploaded']) && !$uploadError) {
-    $uploadSuccess = true;
-}
-
-$photos = getGalleryFiles($photosDir);
+$tree = buildTree($rows);
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $pageTitle ?></title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Меню каталога</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <a href="/" class="logo">lesson 19</a>
-        </div>
-    </header>
-
-    <main class="container">
-        <section class="task">
-            <h2>Загрузить изображение</h2>
-
-            <?php if ($uploadError): ?>
-                <p class="alert alert-error"><?= $uploadError ?></p>
-            <?php endif; ?>
-
-            <?php if ($uploadSuccess): ?>
-                <p class="alert alert-ok">Изображение загружено.</p>
-            <?php endif; ?>
-
-            <form method="post" enctype="multipart/form-data" class="upload-form">
-                <input type="file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" required>
-                <button type="submit">Загрузить</button>
-            </form>
-            <p class="muted">JPG, PNG, GIF или WEBP, до 5 МБ.</p>
-        </section>
-
-        <section class="task">
-            <h2>Галерея</h2>
-            <?php if (empty($photos)): ?>
-                <p class="muted">Пока пусто. Загрузите первое изображение через форму выше.</p>
-            <?php else: ?>
-                <div class="gallery">
-                    <?php foreach ($photos as $photo): ?>
-                        <a href="<?= $photosUrl . '/' . $photo ?>" target="_blank" rel="noopener">
-                            <img src="<?= $thumbsUrl . '/' . $photo ?>" alt="<?= $photo ?>">
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; <?= date('Y') ?></p>
-        </div>
-    </footer>
+    <div class="list-items" id="list-items">
+        <?= renderTree($tree) ?>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
