@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Урок 18';
+$pageTitle = 'lesson18';
 
 function printNumbers()
 {
